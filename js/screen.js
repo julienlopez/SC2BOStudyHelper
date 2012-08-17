@@ -19,6 +19,7 @@ Screen = function()
 	
 	this.pages = Array();
     this.pages.push(new PageAccueil());
+    this.pages.push(new PageTestAffichageBO());
     this.pageActuelle = 0;
     
     /*
