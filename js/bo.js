@@ -8,29 +8,25 @@ BO = function(id)
 	this.containr.appendTo(this.jobject);
 	this.control = $('<div class="bo_control"></div>');
 	this.control.appendTo(this.jobject);
-	var checkbox = $('<input type="checkbox" id="display_buildings_checkbox" />');
-	checkbox.appendTo(this.control);
-	$('<label for="display_buildings_checkbox">Display Buildings</label><br />').appendTo(this.control);
+	
 	var containr = this.containr;
-	checkbox.click(function()
-		{
-			if($(this).is(':checked'))
-			{
-				containr.children(".buildings").each(function(){this.show()});
-			}
-			else
-			{
-				containr.children(".buildings").each(function(){this.hide()});
-			}
-		});
+	var array = {'building':'Buildings', 'unit':'Units', 'research':'Researches'};
 	
-	checkbox = $('<input type="checkbox" id="display_units_checkbox" />');
-	checkbox.appendTo(this.control);
-	$('<label for="display_units_checkbox">Display Units</label><br />').appendTo(this.control);
-	
-	checkbox = $('<input type="checkbox" id="display_researches_checkbox" />');
-	checkbox.appendTo(this.control);
-	$('<label for="display_researches_checkbox">Display Researches</label><br />').appendTo(this.control);
+	for (var i in array)
+	{
+		var checkbox = $('<input type="checkbox" id="display_'+i+'_checkbox" />');
+		checkbox.appendTo(this.control);
+		$('<label for="display_'+i+'_checkbox">Display '+array[i]+'</label><br />').appendTo(this.control);
+		checkbox.attr('checked', true);
+		checkbox.click((function(j)
+			{
+				return function() //closure
+				{
+					if($(this).is(':checked')) containr.children("."+j).each(function(){ $(this).show(); });
+					else containr.children("."+j).each(function(){ $(this).hide(); });
+				}
+			})(i));
+	}
 }
 
 BO.prototype = {
@@ -43,8 +39,14 @@ BO.prototype = {
 			var e = o.events[i];
 			var ev = $('<div class="bo_event"></div>');
 			ev.addClass(e.type);
-			ev.html(e.name);
 			ev.appendTo(this.containr);
+			$('<img src="" alt="" />').appendTo(ev);
+			var div = $('<div></div>');
+			div.css('display',"inline-block");
+			div.appendTo(ev);
+			$('<div>'+e.name+'</div>').appendTo(div);
+			$('<div>'+e.timestamp+'</div>').appendTo(div);
+			$('<div>'+e.supply+'</div>').appendTo(div);
 		}
 	}
 }
